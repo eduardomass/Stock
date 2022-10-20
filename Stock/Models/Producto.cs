@@ -10,7 +10,10 @@ namespace Stock.Models
 
         public int? CategoriaId { get; set; }
 
-        public Categoria? Categoria { get; set; } 
+        public Categoria? Categoria { get; set; }
+        public int Cantidad { get; set; } = 0;
+
+        public IList<ProductoPorUsuario> ProductosPorUsuario { get; set; }
 
     }
 }

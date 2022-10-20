@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,12 +10,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Stock.Migrations
 {
     [DbContext(typeof(StockContext))]
-    partial class StockContextModelSnapshot : ModelSnapshot
+    [Migration("20221020120227_PostUsuario")]
+    partial class PostUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
             modelBuilder.Entity("Stock.Models.Categoria", b =>
                 {
