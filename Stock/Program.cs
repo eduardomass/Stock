@@ -1,9 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
-
-//builder.Services.AddDbContext<StockContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("StockContext") ?? throw new InvalidOperationException("Connection string 'StockContext' not found.")));
 
 
 builder.Services.AddDbContext<StockContext>(options =>
@@ -11,6 +10,17 @@ builder.Services.AddDbContext<StockContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opciones =>
+    {
+        opciones.LoginPath = "/Home/Index";
+        opciones.AccessDeniedPath = "/Usuarios/NoAutorizado";
+        opciones.LogoutPath = "/Login/Logout";
+        opciones.ExpireTimeSpan = System.TimeSpan.FromMinutes(10);
+
+    });
+
 
 var app = builder.Build();
 
@@ -27,7 +37,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); //IDENTITY
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Stock.Models;
 
 namespace Stock.Controllers
 {
+    [Authorize]
     public class ProductosController : Controller
     {
         private readonly StockContext _context;
@@ -45,7 +47,7 @@ namespace Stock.Controllers
 
             return View(producto);
         }
-
+        [Authorize]
         // GET: Productos/Create
         public IActionResult Create()
         {

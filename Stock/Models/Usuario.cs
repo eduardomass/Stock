@@ -9,6 +9,8 @@ namespace Stock.Models
         public string Nombre { get; set; } = "";
         public string Password { get; set; } = "";
 
+        public string Roles { get; set; } = "";
+
         public IList<ProductoPorUsuario>? ProductosPorUsuario { get; set; }
     }
 }
