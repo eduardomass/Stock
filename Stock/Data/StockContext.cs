@@ -22,5 +22,9 @@ public class StockContext : DbContext
 
     public DbSet<Stock.Models.ProductoPorUsuario> ProductosPorUsuario { get; set; } = default!;
     public DbSet<Stock.Models.Usuario> Usuarios { get; set; } = default!;
+    public DbSet<Stock.Models.Trabajador> Trabajadores { get; set; } = default!;
+    public DbSet<Stock.Models.JornadaLaboral> JornadasLaborales { get; set; } = default!;
+
+
 
 }
