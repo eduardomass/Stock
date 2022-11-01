@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Stock.ModelsView.ProductoCarrito>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Vista de Carrito</h1>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Descripcion</td>
+                    <td>@item.Cantidad</td>
+                    <td>Eliminar</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button>Aca va la confirmacion final del carrito</button>
+</div>

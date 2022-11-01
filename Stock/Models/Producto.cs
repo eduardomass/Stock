@@ -13,7 +13,9 @@ namespace Stock.Models
         public Categoria? Categoria { get; set; }
         public int Cantidad { get; set; } = 0;
 
-        public IList<ProductoPorUsuario> ProductosPorUsuario { get; set; }
+        public IList<ProductoPorUsuario>? ProductosPorUsuario { get; set; }
+
+        //public string Foto { get; set; } = "";
 
     }
 }

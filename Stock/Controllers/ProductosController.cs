@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Stock.Models;
+using Stock.ModelsView;
 
 namespace Stock.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ProductosController : Controller
     {
         private readonly StockContext _context;
@@ -166,6 +168,91 @@ namespace Stock.Controllers
         private bool ProductoExists(int id)
         {
           return _context.Productos.Any(e => e.Id == id);
+        }
+
+
+        // GET: Productos
+        public async Task<IActionResult> Productos()
+        {
+            var stockContext = _context
+                .Productos
+                .Include(p => p.Categoria);
+            return View(await stockContext.ToListAsync());
+        }
+
+        // GET: Productos
+        public IActionResult Carrito()
+        {
+            var modelo = this.ProductosEnCarrito;
+            return View(modelo);
+        }
+        // GET: Productos
+        public async Task<IActionResult> Agregar(int id)
+        {
+            var producto = await _context
+                .Productos
+                .Where(p => p.Id == id)
+                .Include(p => p.Categoria)
+                .FirstOrDefaultAsync();
+            if (producto == null)
+            {
+                producto = new Producto();
+                //falta tratado de error
+            }
+            ProductoCarrito modelo = new ProductoCarrito()
+            {
+                Descripcion = producto.Nombre,
+                DescripcionCategoria = producto.Categoria.Descripcion,
+                Id = producto.Id,
+                Cantidad = 0
+            };
+            return View(modelo);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agregar(ProductoCarrito modelo)
+        {
+            var producto = await _context
+               .Productos
+               .Where(p => p.Id == modelo.Id)
+               .Include(p => p.Categoria)
+               .FirstOrDefaultAsync();
+            modelo.SetProducto(producto);
+            this.AgregarACarrito(modelo);
+
+            return RedirectToAction(nameof(Carrito));
+        }
+
+        public List<ProductoCarrito> ProductosEnCarrito { 
+            get
+            {
+                var value = HttpContext.Session.GetString("Productos");
+                if (value == null)
+                    return new List<ProductoCarrito>();
+                else
+                    return JsonConvert.DeserializeObject<List<ProductoCarrito>>(value);
+            }
+            set
+            {
+                var js = JsonConvert.SerializeObject(value);
+                HttpContext.Session.SetString("Productos", js);
+            }
+        }
+        private void AgregarACarrito(ProductoCarrito productoCarrito)
+        {
+            var carrito = this.ProductosEnCarrito;
+            var productoExistente = carrito.Where(o => o.Id == productoCarrito.Id).FirstOrDefault();
+            //Si el producto no esta, lo agrego, sino remplazo la cantidad
+            if (productoExistente == null)
+            {
+                carrito.Add(productoCarrito);
+                this.ProductosEnCarrito = carrito; //seteo nuevamente el carrito
+
+            }
+            else
+            {
+                productoExistente.Cantidad = productoCarrito.Cantidad;
+            }
         }
     }
 }

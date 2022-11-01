@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Stock.Models.Producto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Productos</h1>
+<div class="row">
+  
+@foreach (var item in Model)
+{
+    <div class="col-4">
+<div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+  <div class="card-header">@item.Nombre</div>
+  <div class="card-body">
+    <h5 class="card-title">@item.Categoria.Descripcion</h5>
+    <p class="card-text"><a href="/Productos/Agregar/@item.Id">Agregar!</a></p>
+  </div>
+</div>
+</div>
+}
+</div>
