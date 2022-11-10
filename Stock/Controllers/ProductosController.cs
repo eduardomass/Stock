@@ -74,8 +74,30 @@ namespace Stock.Controllers
             return View(producto);
         }
 
-        // GET: Productos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+
+        public async Task<IActionResult> Seleccionar()
+        {
+            var stockContext = _context
+                .Productos
+                .Include(p => p.Categoria);
+            var productos = await stockContext.ToListAsync();
+            var pedido = new Pedido();
+            pedido.Productos = new SelectList(productos, "Id", "Nombre");
+            return View(pedido);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public IActionResult Seleccionar(Pedido pedido)
+        {
+            return View("Seleccionar", pedido);
+        }
+
+
+            // GET: Productos/Edit/5
+            public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Productos == null)
             {
@@ -227,7 +249,7 @@ namespace Stock.Controllers
             get
             {
                 var value = HttpContext.Session.GetString("Productos");
-                if (value == null)
+                if (value == null || value == "")
                     return new List<ProductoCarrito>();
                 else
                     return JsonConvert.DeserializeObject<List<ProductoCarrito>>(value);

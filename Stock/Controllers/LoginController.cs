@@ -77,6 +77,7 @@ namespace Stock.Controllers
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+            HttpContext.Session.SetString("Productos", "");
             return View("Index");
         }
     }
